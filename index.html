@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>법제처 국가법령정보 키워드 대시보드</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;background:#f7f9fc;min-height:100vh}
+
+/* 상단바 */
+.topbar{background:#0f2d56;color:white;padding:0 1.5rem;display:flex;align-items:center;height:56px;border-bottom:3px solid #e8401c}
+.topbar-title{font-size:16px;font-weight:500;flex:1}
+.topbar-sub{font-size:11px;color:#94b3d4;margin-bottom:2px}
+
+/* 탭 */
+.tabs{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 1.5rem;display:flex;overflow-x:auto}
+.tab{padding:.85rem 1.5rem;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:#64748b;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .15s}
+.tab:hover{color:#1a202c}
+.tab.active{color:#0f2d56;border-bottom-color:#e8401c;font-weight:500}
+.tab-badge{background:#eef2ff;color:#0f2d56;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.tab.active .tab-badge{background:#e8401c;color:#fff}
+
+/* 본문 */
+.main{padding:1.25rem 1.5rem;max-width:1200px;margin:0 auto}
+
+/* 통계 카드 */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1rem}
+.sc{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:1rem 1.1rem}
+.sl{font-size:11px;color:#64748b;margin-bottom:4px}
+.sv{font-size:24px;font-weight:500;color:#1a202c}
+.ss{font-size:11px;color:#94a3b8;margin-top:2px}
+
+/* 업데이트 바 */
+.wbar{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:.65rem 1rem;display:flex;align-items:center;gap:10px;margin-bottom:.85rem;font-size:12px;color:#15803d}
+.pw{flex:1;background:#dcfce7;border-radius:3px;height:5px}
+.pb{height:5px;background:#15803d;border-radius:3px}
+
+/* 패널 */
+.panel{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:1rem}
+.ph{padding:.85rem 1rem;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.pt{font-size:13px;font-weight:500;color:#1a202c}
+.ctrls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+input,select{border:1px solid #e2e8f0;border-radius:4px;padding:5px 10px;font-size:12px;font-family:inherit;outline:none}
+input:focus,select:focus{border-color:#1d6fa4}
+
+/* 테이블 */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#f8fafc;padding:10px 12px;text-align:left;font-weight:500;color:#64748b;border-bottom:1px solid #e2e8f0;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #f1f5f9;color:#1a202c;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+.ln{color:#1d6fa4;font-weight:500;text-decoration:none}
+.ln:hover{text-decoration:underline}
+
+/* 태그 */
+.tag{display:inline-flex;font-size:11px;padding:2px 8px;border-radius:3px;font-weight:500}
+.t1{background:#dbeafe;color:#1e40af}
+.t2{background:#fef3c7;color:#92400e}
+.t3{background:#dcfce7;color:#166534}
+.t4{background:#f3e8ff;color:#6b21a8}
+.tn{background:#fee2e2;color:#991b1b;font-size:10px;margin-left:4px}
+
+/* 하단 바 */
+.sbar{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.9rem 1rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.si2{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dg{background:#15803d}.da{background:#b45309}.dd{background:#94a3b8}
+
+/* 로딩/알림 */
+.loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:3rem;color:#64748b;font-size:13px}
+.spinner{width:18px;height:18px;border:2px solid #e2e8f0;border-top-color:#1d6fa4;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.info{background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;padding:.75rem 1rem;font-size:12px;color:#1e40af;margin:.5rem 0;line-height:1.7}
+.err{background:#fff5f5;border:1px solid #fca5a5;border-radius:6px;padding:.75rem 1rem;font-size:12px;color:#991b1b;margin:.5rem 0;line-height:1.7}
+
+/* 버튼 */
+.btn{border-radius:4px;font-size:12px;padding:6px 14px;cursor:pointer;border:none;font-family:inherit;font-weight:500;color:#fff;background:#0f2d56}
+.btn:hover{background:#1a3f72}
+
+@media(max-width:768px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .tab{padding:.7rem 1rem;font-size:12px}
+  th,td{padding:8px 8px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div style="flex:1">
+    <div style="font-size:11px;color:#94b3d4;margin-bottom:2px">법제처 국가법령정보센터 Open API · GitHub Pages</div>
+    <div class="topbar-title">키워드 법령 모니터링 대시보드</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="font-size:12px;color:#94b3d4;text-align:right;line-height:1.6" id="updateInfo">데이터 로딩 중...</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab(0)" id="tab0">어린이제품 <span class="tab-badge" id="b0">-</span></div>
+  <div class="tab" onclick="switchTab(1)" id="tab1">화장품 <span class="tab-badge" id="b1">-</span></div>
+  <div class="tab" onclick="switchTab(2)" id="tab2">위생용품 <span class="tab-badge" id="b2">-</span></div>
+  <div class="tab" onclick="switchTab(3)" id="tab3">원산지 <span class="tab-badge" id="b3">-</span></div>
+</div>
+
+<div class="main">
+  <div class="stats-row">
+    <div class="sc"><div class="sl">총 법령 수</div><div class="sv" id="stTotal">-</div><div class="ss">현재 탭 기준</div></div>
+    <div class="sc"><div class="sl">최근 30일 공포</div><div class="sv" id="stRecent" style="color:#15803d">-</div><div class="ss">신규·개정</div></div>
+    <div class="sc"><div class="sl">법률</div><div class="sv" id="stLaw">-</div><div class="ss">상위 법령</div></div>
+    <div class="sc"><div class="sl">하위 법령</div><div class="sv" id="stSub">-</div><div class="ss">령·규칙·고시</div></div>
+  </div>
+
+  <div class="wbar" id="wbar" style="display:none">
+    <div class="dot dg"></div>
+    <span id="wtext">주간 데이터 최신화 완료</span>
+    <div class="pw"><div class="pb" id="wpb" style="width:0%"></div></div>
+    <span id="wnext" style="white-space:nowrap"></span>
+  </div>
+
+  <div class="panel">
+    <div class="ph">
+      <span class="pt" id="ptitle">법령 목록</span>
+      <div class="ctrls">
+        <input id="sq" placeholder="법령명 검색..." oninput="doFilter()" style="width:180px">
+        <select id="sf" onchange="doFilter()" style="width:100px">
+          <option value="">전체 유형</option>
+          <option>법률</option>
+          <option>대통령령</option>
+          <option>총리령</option>
+          <option>부령</option>
+          <option>고시</option>
+        </select>
+      </div>
+    </div>
+    <div id="area">
+      <div class="loading"><div class="spinner"></div>데이터 불러오는 중...</div>
+    </div>
+  </div>
+
+  <div class="sbar">
+    <div class="si2"><div class="dot dg"></div>자동 갱신: 매주 월요일 09:00 KST (GitHub Actions)</div>
+    <div class="si2"><div class="dot da"></div>출처: 법제처 국가법령정보센터 Open API</div>
+    <div class="si2"><div class="dot dd"></div>어린이제품 · 화장품 · 위생용품 · 원산지</div>
+  </div>
+</div>
+
+<script>
+const KW = ['어린이제품', '화장품', '위생용품', '원산지'];
+let cur = 0;
+let data = { 0: [], 1: [], 2: [], 3: [] };
+
+const TAGS = {
+  '법률':    '<span class="tag t1">법률</span>',
+  '대통령령': '<span class="tag t2">대통령령</span>',
+  '총리령':  '<span class="tag t3">총리령</span>',
+  '부령':    '<span class="tag t3">부령</span>',
+  '고시':    '<span class="tag t4">고시</span>',
+};
+const tag = t => TAGS[t] || `<span class="tag t4">${t}</span>`;
+const fmtDate = s => (s || '').replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3');
+const isNew = s => s && (Date.now() - new Date(fmtDate(s))) < 30 * 864e5;
+
+function renderTable(rows) {
+  if (!rows || !rows.length)
+    return '<div style="text-align:center;padding:2.5rem;color:#64748b">표시할 법령이 없습니다.</div>';
+
+  let h = `<div style="overflow-x:auto"><table>
+    <thead><tr>
+      <th style="width:40px">#</th>
+      <th>법령명</th><th>구분</th><th>소관부처</th>
+      <th>공포일자</th><th>시행일자</th><th>링크</th>
+    </tr></thead><tbody>`;
+
+  rows.forEach((r, i) => {
+    const newBadge = r.isNew ? '<span class="tag tn">NEW</span>' : '';
+    h += `<tr>
+      <td style="color:#94a3b8;text-align:center">${i + 1}</td>
+      <td><a class="ln" href="${r.link}" target="_blank">${r.name}</a>${newBadge}</td>
+      <td>${tag(r.type)}</td>
+      <td style="color:#64748b;font-size:12px;white-space:nowrap">${r.dept}</td>
+      <td style="white-space:nowrap;color:#64748b;font-size:12px">${fmtDate(r.promul)}</td>
+      <td style="white-space:nowrap;color:#64748b;font-size:12px">${fmtDate(r.eff)}</td>
+      <td><a class="ln" href="${r.link}" target="_blank" style="font-size:11px">상세 ↗</a></td>
+    </tr>`;
+  });
+
+  return h + '</tbody></table></div>';
+}
+
+function calcStats(rows) {
+  let law = 0, sub = 0, recent = 0;
+  rows.forEach(r => {
+    if (r.type === '법률') law++; else sub++;
+    if (r.isNew) recent++;
+  });
+  document.getElementById('stTotal').textContent  = rows.length;
+  document.getElementById('stRecent').textContent = recent;
+  document.getElementById('stLaw').textContent    = law;
+  document.getElementById('stSub').textContent    = sub;
+}
+
+function doFilter() {
+  const q  = document.getElementById('sq').value.toLowerCase();
+  const tf = document.getElementById('sf').value;
+  let rows = data[cur];
+  if (q)  rows = rows.filter(r => r.name.toLowerCase().includes(q));
+  if (tf) rows = rows.filter(r => r.type === tf);
+  document.getElementById('area').innerHTML = renderTable(rows);
+  calcStats(rows);
+}
+
+function switchTab(i) {
+  cur = i;
+  KW.forEach((_, j) => document.getElementById('tab' + j).classList.toggle('active', i === j));
+  document.getElementById('ptitle').textContent = KW[i] + ' 관련 법령';
+  document.getElementById('sq').value = '';
+  document.getElementById('sf').value = '';
+  doFilter();
+}
+
+function setScheduleBar(updatedStr) {
+  const updated = updatedStr ? new Date(updatedStr.replace(' KST', '')) : new Date();
+  const fmt = d => `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+  document.getElementById('updateInfo').innerHTML =
+    `마지막 업데이트<br><strong style="color:#fff">${updatedStr || fmt(updated)}</strong>`;
+
+  const next = new Date(updated);
+  next.setDate(updated.getDate() + (8 - updated.getDay()) % 7 || 7);
+  const days = Math.max(0, Math.ceil((next - Date.now()) / 864e5));
+  const pct  = Math.round((7 - days) / 7 * 100);
+
+  document.getElementById('wbar').style.display = 'flex';
+  document.getElementById('wpb').style.width    = pct + '%';
+  document.getElementById('wnext').textContent  = `다음 갱신: ${fmt(next)} (${days}일 후)`;
+}
+
+async function loadData() {
+  try {
+    const res = await fetch('./data.json?t=' + Date.now());
+    if (!res.ok) throw new Error('data.json 없음 (HTTP ' + res.status + ')');
+    const json = await res.json();
+
+    KW.forEach((kw, i) => {
+      const list = json[kw] || [];
+      data[i] = list.map(l => ({
+        name:   l['법령명한글'] || '',
+        type:   l['법령구분명'] || '',
+        dept:   l['소관부처명'] || '',
+        promul: l['공포일자']  || '',
+        eff:    l['시행일자']  || '',
+        link:   l['법령상세링크'] || 'https://www.law.go.kr',
+        isNew:  isNew(l['공포일자']),
+      }));
+      document.getElementById('b' + i).textContent = data[i].length;
+    });
+
+    setScheduleBar(json.updated || null);
+    switchTab(0);
+
+    const ok = document.createElement('div');
+    ok.className = 'info';
+    ok.innerHTML = `✓ 데이터 로드 완료 — GitHub Actions가 매주 자동 갱신합니다.`;
+    document.getElementById('area').prepend(ok);
+    setTimeout(() => ok.remove(), 4000);
+
+  } catch (e) {
+    document.getElementById('area').innerHTML = `
+      <div class="err">
+        <strong>data.json을 찾을 수 없습니다.</strong><br>
+        GitHub Actions 워크플로우를 먼저 실행해 data.json을 생성하세요.<br><br>
+        Actions 탭 → <em>법령 데이터 주간 업데이트</em> → <strong>Run workflow</strong>
+      </div>`;
+    document.getElementById('updateInfo').innerHTML = '데이터 없음<br>워크플로우 실행 필요';
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>
