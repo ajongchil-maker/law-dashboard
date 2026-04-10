@@ -5,7 +5,7 @@ import datetime
 import os
 import xml.etree.ElementTree as ET
 
-API_KEY = '259f5fa03d60f5fd5e815069f961c4dfce91c5645842baa7d37f2e35816a3c4d'
+API_KEY = os.environ.get('LAW_API_KEY', '')
 KEYWORDS = ['어린이제품', '화장품', '위생용품', '원산지']
 result = {}
 
