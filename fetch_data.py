@@ -4,31 +4,34 @@ import json
 import datetime
 import os
 
-OC = os.environ['LAW_API_KEY']
+# 공공데이터포털 API 키 (serviceKey)
+API_KEY = os.environ.get('LAW_API_KEY', '')
 KEYWORDS = ['어린이제품', '화장품', '위생용품', '원산지']
 result = {}
 
 for kw in KEYWORDS:
     url = (
-        'https://www.law.go.kr/DRF/lawSearch.do'
-        '?OC=' + OC +
-        '&target=law'
+        'http://apis.data.go.kr/1170000/law/lawSearchList.do'
+        '?serviceKey=' + API_KEY +
         '&query=' + urllib.parse.quote(kw) +
-        '&type=JSON'
         '&display=30'
         '&page=1'
         '&sort=date'
+        '&type=JSON'
     )
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     try:
         with urllib.request.urlopen(req, timeout=20) as res:
             raw = res.read().decode('utf-8')
-        print(f'[{kw}] 원문: {raw[:200]}')
+        print(f'[{kw}] 원문: {raw[:300]}')
         data = json.loads(raw)
-        law_search = data.get('LawSearch', {})
-        laws = law_search.get('law', [])
+        # 공공데이터포털 응답 구조 파싱
+        body = data.get('LawSearch', data.get('response', {}).get('body', {}))
+        laws = body.get('law', body.get('items', {}).get('item', []))
         if isinstance(laws, dict):
             laws = [laws]
+        if not isinstance(laws, list):
+            laws = []
         result[kw] = laws
         print(f'[{kw}] {len(laws)}건 수집 완료')
     except Exception as e:
