@@ -4,34 +4,36 @@ import json
 import datetime
 import os
 
-# 공공데이터포털 API 키 (serviceKey)
 API_KEY = os.environ.get('LAW_API_KEY', '')
 KEYWORDS = ['어린이제품', '화장품', '위생용품', '원산지']
 result = {}
 
 for kw in KEYWORDS:
-    url = (
-        'http://apis.data.go.kr/1170000/law/lawSearchList.do'
-        '?serviceKey=' + API_KEY +
-        '&query=' + urllib.parse.quote(kw) +
-        '&display=30'
-        '&page=1'
-        '&sort=date'
-        '&type=JSON'
-    )
+    params = urllib.parse.urlencode({
+        'serviceKey': API_KEY,
+        'query': kw,
+        'numOfRows': '30',
+        'pageNo': '1',
+        'target': 'law',
+        'type': 'XML'
+    })
+    url = f'http://apis.data.go.kr/1170000/law/lawSearchList.do?{params}'
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     try:
+        import xml.etree.ElementTree as ET
         with urllib.request.urlopen(req, timeout=20) as res:
             raw = res.read().decode('utf-8')
-        print(f'[{kw}] 원문: {raw[:300]}')
-        data = json.loads(raw)
-        # 공공데이터포털 응답 구조 파싱
-        body = data.get('LawSearch', data.get('response', {}).get('body', {}))
-        laws = body.get('law', body.get('items', {}).get('item', []))
-        if isinstance(laws, dict):
-            laws = [laws]
-        if not isinstance(laws, list):
-            laws = []
+        root = ET.fromstring(raw)
+        laws = []
+        for item in root.findall('.//law'):
+            laws.append({
+                '법령명한글': item.findtext('법령명한글', ''),
+                '법령구분명': item.findtext('법령구분명', ''),
+                '소관부처명': item.findtext('소관부처명', ''),
+                '공포일자':   item.findtext('공포일자', ''),
+                '시행일자':   item.findtext('시행일자', ''),
+                '법령상세링크': item.findtext('법령상세링크', 'https://www.law.go.kr'),
+            })
         result[kw] = laws
         print(f'[{kw}] {len(laws)}건 수집 완료')
     except Exception as e:
