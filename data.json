@@ -1,6 +1,56 @@
 {
-  "어린이제품": [],
-  "화장품": [],
+  "어린이제품": [
+    {
+      "법령명한글": "어린이제품 안전 특별법",
+      "법령구분명": "법률",
+      "소관부처명": "산업통상부",
+      "공포일자": "20251001",
+      "시행일자": "20251001",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=276551&type=HTML&mobileYn=&efYd=20251001"
+    },
+    {
+      "법령명한글": "어린이제품 안전 특별법 시행령",
+      "법령구분명": "대통령령",
+      "소관부처명": "산업통상부",
+      "공포일자": "20251001",
+      "시행일자": "20251001",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=278389&type=HTML&mobileYn=&efYd=20251001"
+    },
+    {
+      "법령명한글": "어린이제품 안전 특별법 시행규칙",
+      "법령구분명": "산업통상자원부령",
+      "소관부처명": "산업통상부",
+      "공포일자": "20250818",
+      "시행일자": "20260101",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=273387&type=HTML&mobileYn=&efYd=20260101"
+    }
+  ],
+  "화장품": [
+    {
+      "법령명한글": "화장품법",
+      "법령구분명": "법률",
+      "소관부처명": "식품의약품안전처",
+      "공포일자": "20250401",
+      "시행일자": "20260402",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=270323&type=HTML&mobileYn=&efYd=20260402"
+    },
+    {
+      "법령명한글": "화장품법 시행령",
+      "법령구분명": "대통령령",
+      "소관부처명": "식품의약품안전처",
+      "공포일자": "20260310",
+      "시행일자": "20260402",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=283963&type=HTML&mobileYn=&efYd=20260402"
+    },
+    {
+      "법령명한글": "화장품법 시행규칙",
+      "법령구분명": "총리령",
+      "소관부처명": "식품의약품안전처",
+      "공포일자": "20260331",
+      "시행일자": "20260402",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=285249&type=HTML&mobileYn=&efYd=20260402"
+    }
+  ],
   "위생용품": [
     {
       "법령명한글": "위생용품 관리법",
@@ -61,6 +111,6 @@
       "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=282659&type=HTML&mobileYn=&efYd=20260102"
     }
   ],
-  "updated": "2026-05-04 11:49 KST",
-  "total": 7
+  "updated": "2026-05-11 12:29 KST",
+  "total": 13
 }
