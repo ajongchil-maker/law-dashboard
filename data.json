@@ -57,24 +57,24 @@
       "법령구분명": "법률",
       "소관부처명": "식품의약품안전처",
       "공포일자": "20251111",
-      "시행일자": "20251111",
-      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=279749&type=HTML&mobileYn=&efYd=20251111"
+      "시행일자": "20260512",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=279749&type=HTML&mobileYn=&efYd=20260512"
     },
     {
       "법령명한글": "위생용품 관리법 시행령",
       "법령구분명": "대통령령",
       "소관부처명": "식품의약품안전처",
-      "공포일자": "20240806",
-      "시행일자": "20250614",
-      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=264747&type=HTML&mobileYn=&efYd=20250614"
+      "공포일자": "20260506",
+      "시행일자": "20260512",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=285823&type=HTML&mobileYn=&efYd=20260512"
     },
     {
       "법령명한글": "위생용품 관리법 시행규칙",
       "법령구분명": "총리령",
       "소관부처명": "식품의약품안전처",
-      "공포일자": "20251230",
-      "시행일자": "20251230",
-      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=282291&type=HTML&mobileYn=&efYd=20251230"
+      "공포일자": "20260511",
+      "시행일자": "20260512",
+      "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=286019&type=HTML&mobileYn=&efYd=20260512"
     }
   ],
   "원산지": [
@@ -111,6 +111,6 @@
       "법령상세링크": "https://www.law.go.kr/DRF/lawService.do?OC=sapphire_5&target=law&MST=282659&type=HTML&mobileYn=&efYd=20260102"
     }
   ],
-  "updated": "2026-05-11 12:29 KST",
+  "updated": "2026-05-18 12:38 KST",
   "total": 13
 }
